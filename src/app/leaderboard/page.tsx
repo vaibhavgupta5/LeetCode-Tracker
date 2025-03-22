@@ -18,63 +18,49 @@ import { ShootingStars } from "@/components/ui/shooting-stars";
 import { StarsBackground } from "@/components/ui/stars-background";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { useRouter } from "next/navigation";
+import { FaSearch, FaSync } from "react-icons/fa"; // Import icons
+import axios from "axios";
 
 export default function LeaderboardPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<Student | null>(null);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
 
   useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const response = await fetch("/api/getAllStudentData");
-        const data = await response.json();
-
-        // For demo purposes, create an array of students based on the model
-        const student = data.student;
-
-        console.log(student);
-
-        // Sort by ranking
-        student.sort((a, b) => a.raking - b.raking);
-
-        setStudents(student);
-        setCurrentUser({
-          ...student,
-          fullName: "You",
-          username: "current_user",
-          raking: 0,
-          rating: 1200,
-          totalQuestions: {
-            All: 10,
-            Easy: 8,
-            Medium: 2,
-            Hard: 0,
-          },
-          totalSubmissions: {
-            All: 15,
-            Easy: 12,
-            Medium: 3,
-            Hard: 0,
-          },
-          mainLanguages: ["JavaScript"],
-          badges: [],
-        });
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching students:", error);
-        setLoading(false);
-      }
-    };
-
     fetchStudents();
   }, []);
 
-  const router = useRouter()
-  const redirectToProfile = (username: string) =>{
-    router.push(`/dashboard/${username}`)
-  }
+  const fetchStudents = async () => {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 seconds timeout
+  
+      const response = await fetch("/api/getAllStudentData", {
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      const student = data.student;
+      student.sort((a, b) => a.raking - b.raking);
+  
+      setStudents(student);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching students:", error);
+      setLoading(false);
+    }
+  };
+
+  const router = useRouter();
+  const redirectToProfile = (username: string) => {
+    router.push(`/dashboard/${username}`);
+  };
 
   const getInitials = (name: string) => {
     return name
@@ -84,7 +70,6 @@ export default function LeaderboardPage() {
       .toUpperCase();
   };
 
-  // Function to generate a gradient color based on position
   const getPositionColor = (position: number) => {
     if (position === 1) return "text-green-400";
     if (position === 2) return "text-blue-400";
@@ -92,13 +77,32 @@ export default function LeaderboardPage() {
     return "text-gray-400";
   };
 
-  // Calculate success rate
+  const refreshData = async () => {
+    setLoading(true);
+    const response = await axios.get("/api/updateAllStudentDataAtOnce");
+
+    if (response.status === 200) {
+      fetchStudents();
+    } else {
+      console.error("Error refreshing data:", response.statusText);
+      setLoading(false);
+    }
+  }
+
   const getSuccessRate = (student: Student) => {
     if (student.totalSubmissions.All === 0) return "0.00%";
     const rate =
       (student.totalQuestions.All / student.totalSubmissions.All) * 100;
     return `${rate.toFixed(2)}%`;
   };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredStudents = students.filter((student) =>
+    student.username.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (loading) {
     return (
@@ -108,45 +112,24 @@ export default function LeaderboardPage() {
     );
   }
 
-  // Get top 3 students for the 3D visualization
   const topStudents = students.slice(0, 3);
 
   return (
     <div className="min-h-screen bg-black text-white p-4">
-            <Spotlight />
-            <ShootingStars />
-            <StarsBackground />
+      <Spotlight />
+      <ShootingStars />
+      <StarsBackground />
 
       <div className="max-w-6xl mx-auto">
+        <h1 className="md:text-7xl text-3xl flex w-full justify-center items-center lg:text-9xl font-bold text-center text-white relative z-20">
+          Leaderboard
+        </h1>
+      
 
-      <h1 className="md:text-7xl text-3xl flex w-full justify-center items-center lg:text-9xl font-bold text-center text-white relative z-20">
-        Leaderboard
-      </h1>
-      <div className="max-w-3xl mx-auto  relative h-[10vh] ">
-        {/* Gradients */}
-        <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
-        <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
-        <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
-        <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
- 
-        {/* Core component */}
-        <SparklesCore
-          background="transparent"
-          minSize={0.4}
-          maxSize={1}
-          particleDensity={1200}
-          className="w-full justify-center flex items-center h-full"
-          particleColor="#FFFFFF"
-        />
- 
-        {/* Radial Gradient to prevent sharp edges */}
-        <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
-      </div>
-
-        <div className="relative h-[40vh] mb-16 w-full rounded-lg p-4  overflow-hidden">
-          {/* Players - relative positioning and dark theme */}
+        <div className="relative h-[40vh] mb-16 w-full rounded-lg p-4 overflow-hidden">
+          {/* Top 3 Players */}
           <div className="absolute inset-0 flex items-end justify-center z-20">
-            {/* 2nd place player */}
+            {/* 2nd Place */}
             <div className="flex flex-col items-center w-56 mx-4 mb-8 transform transition-transform duration-300 hover:scale-105">
               <div className="mb-2">
                 <div className="w-14 h-14 rounded-full border-2 border-blue-500/50 p-1 bg-gray-800">
@@ -174,7 +157,7 @@ export default function LeaderboardPage() {
               </div>
             </div>
 
-            {/* 1st place player */}
+            {/* 1st Place */}
             <div className="flex flex-col items-center w-56 mx-4 mb-16 transform transition-transform duration-300 hover:scale-105">
               <div className="mb-2">
                 <div className="w-14 h-14 rounded-full border-2 border-green-500/50 p-1 bg-gray-800">
@@ -202,7 +185,7 @@ export default function LeaderboardPage() {
               </div>
             </div>
 
-            {/* 3rd place player */}
+            {/* 3rd Place */}
             <div className="flex flex-col items-center w-56 mx-4 mb-4 transform transition-transform duration-300 hover:scale-105">
               <div className="mb-2">
                 <div className="w-14 h-14 rounded-full border-2 border-purple-500/50 p-1 bg-gray-800">
@@ -231,7 +214,7 @@ export default function LeaderboardPage() {
             </div>
           </div>
 
-          {/* Subtle 3D grid - dark theme */}
+          {/* 3D Grid */}
           <div className="absolute inset-0 pointer-events-none">
             <svg
               className="w-full h-full"
@@ -274,33 +257,57 @@ export default function LeaderboardPage() {
             </svg>
           </div>
         </div>
+
         {/* Leaderboard Table */}
         <Card className="bg-gray-900 border-gray-800 shadow-lg overflow-hidden pl-4 pr-4">
+          <CardHeader className="p-4 border-b border-gray-800 flex justify-between items-center z-10">
+            <CardTitle className="text-gray-300 text-lg">Leaderboard</CardTitle>
+            <div className="flex items-center space-x-4">
+              {/* Search Input */}
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  className="bg-gray-800 text-gray-200 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                />
+                <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              </div>
+
+              <button
+                onClick={()=> refreshData()}
+                className="p-2 bg-gray-800 cursor-pointer rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                <FaSync className="text-gray-400 cursor-pointer" />
+              </button>
+            </div>
+          </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <Table className="w-full">
-                <TableHeader className="">
-                  <TableRow className="border-gray-700 hover:bg-transparent ">
+                <TableHeader>
+                  <TableRow className="border-gray-700 hover:bg-transparent">
                     <TableHead className="text-gray-300 font-semibold w-20 py-4">
                       RANK
                     </TableHead>
                     <TableHead className="text-gray-300 font-semibold py-4">
                       PLAYER
                     </TableHead>
-                    <TableHead className="text-gray-300 font-semibold  py-4">
+                    <TableHead className="text-gray-300 font-semibold py-4">
                       SOLVED
                     </TableHead>
-                    <TableHead className="text-gray-300 font-semibold  py-4">
-                      <div className="flex space-x-2 ">
+                    <TableHead className="text-gray-300 font-semibold py-4">
+                      <div className="flex space-x-2">
                         <span className="text-green-400">E</span>
                         <span className="text-yellow-400">M</span>
                         <span className="text-red-400">H</span>
                       </div>
                     </TableHead>
-                    <TableHead className="text-gray-300 font-semibold  py-4">
+                    <TableHead className="text-gray-300 font-semibold py-4">
                       SUCCESS RATE
                     </TableHead>
-                    <TableHead className="text-gray-300 font-semibold  py-4">
+                    <TableHead className="text-gray-300 font-semibold py-4">
                       LANGUAGES
                     </TableHead>
                     <TableHead className="text-gray-300 font-semibold text-right py-4">
@@ -309,65 +316,11 @@ export default function LeaderboardPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {/* Current User with highlighted background */}
-                  {/* {currentUser && (
-                    <TableRow className="bg-gray-800/50 border-t border-b border-blue-500/30 hover:bg-gray-800/70 transition-colors">
-                      <TableCell className="text-gray-400 font-medium py-6">
-                        UNRANKED
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Avatar className="h-8 w-8 ring-2 ring-blue-500/40">
-                            <AvatarImage src="/api/placeholder/32/32" />
-                          </Avatar>
-                          <div className="text-yellow-400 font-semibold">
-                            {currentUser.username}
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className=" text-gray-300 font-medium">
-                        {currentUser.totalQuestions.All}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <div className="flex  space-x-3">
-                          <span className="text-green-400 font-medium">
-                            {currentUser.totalQuestions.Easy}
-                          </span>
-                          <span className="text-yellow-400 font-medium">
-                            {currentUser.totalQuestions.Medium}
-                          </span>
-                          <span className="text-red-400 font-medium">
-                            {currentUser.totalQuestions.Hard}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell className=" text-gray-300 font-medium">
-                        {getSuccessRate(currentUser)}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <div className="flex  gap-1 flex-wrap">
-                          {currentUser.mainLanguages.map((lang, i) => (
-                            <Badge
-                              key={i}
-                              className="bg-blue-600/30 text-blue-200 hover:bg-blue-500/40 transition-colors text-xs border-0"
-                            >
-                              {lang}
-                            </Badge>
-                          ))}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right text-gray-300 font-medium">
-                        {currentUser.rating}
-                      </TableCell>
-                    </TableRow>
-                  )} */}
-
-                  {/* Students List */}
-                  {students.map((student, index) => (
+                  {filteredStudents.map((student, index) => (
                     <TableRow
                       key={index}
                       className="border-gray-700/50 cursor-pointer hover:bg-gray-800/30 transition-colors"
-                      onClick={()=> redirectToProfile(student.username)}  
+                      onClick={() => redirectToProfile(student.username)}
                     >
                       <TableCell
                         className={`py-3 ${getPositionColor(student.raking)}`}
@@ -387,11 +340,11 @@ export default function LeaderboardPage() {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className=" text-gray-300 font-medium">
+                      <TableCell className="text-gray-300 font-medium">
                         {student.totalQuestions.All}
                       </TableCell>
                       <TableCell className="text-center">
-                        <div className="flex  space-x-3">
+                        <div className="flex space-x-3">
                           <span className="text-green-400">
                             {student.totalQuestions.Easy}
                           </span>
@@ -403,11 +356,11 @@ export default function LeaderboardPage() {
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className=" text-gray-300">
+                      <TableCell className="text-gray-300">
                         {getSuccessRate(student)}
                       </TableCell>
                       <TableCell className="text-center">
-                        <div className="flex  gap-1 flex-wrap">
+                        <div className="flex gap-1 flex-wrap">
                           {student.mainLanguages.map((lang, i) => (
                             <Badge
                               key={i}
