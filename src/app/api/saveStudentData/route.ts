@@ -48,6 +48,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const totalSolved = totalQuestions?.All || 0;
+    const contestPerformance = contests?.reduce((sum, c) => sum + c.rating, 0) / (contests?.length || 1);
+    const recentActivity = last5Submissions?.filter((sub) => sub.status === "Accepted").length || 0;
+    const badgesEarned = badges?.length || 0;
+    const submissionQuality = (totalSubmissions?.All > 0) ? (recentActivity / totalSubmissions.All) * 100 : 0;
+
+    const rankingScore = (0.4 * totalSolved) + (0.3 * contestPerformance) + (0.1 * recentActivity) + (0.1 * badgesEarned) + (0.1 * submissionQuality);
+
     const studentData = {
       username,
       fullName,
@@ -58,7 +66,7 @@ export async function POST(req: NextRequest) {
         Hard: 0,
       },
       raking: raking || 0,
-      rating: rating || 0,
+      rating: Math.round(rankingScore) || 0,
       last5Submissions: last5Submissions || [],
       contests: contests || [],
       badges: badges || [],

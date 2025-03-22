@@ -3,15 +3,15 @@ import axios from "axios";
 
 const fetchAPI = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/pratyush-who/");
+    const response = await axios.get("http://localhost:3001/updateAllStudentDataAtOnce/");
     console.log("Fetched data:", response.data);
   } catch (error) {
     console.error("Error fetching API:", (error as Error).message);
   }
 };
 
-cron.schedule("0 9 * * *", () => {
-  console.log("Running cron job at 9 AM...");
+cron.schedule("25 13 * * *", () => {
+  console.log("Running cron job at 1:25 PM...");
   fetchAPI();
 });
 
