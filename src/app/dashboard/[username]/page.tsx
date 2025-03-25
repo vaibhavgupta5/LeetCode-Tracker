@@ -82,14 +82,12 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 interface DashboardPageProps {
-  params: {
-    username: string;
-  };
+  params: Promise<{ username: string }>;
 }
 
 export default async function UserDashboard({ params }: DashboardPageProps) {
-  const { username } = params;
   
+  const { username } = await params;  
   try {
     const studentData = await getStudentData(username);
     
