@@ -40,7 +40,8 @@ function formatDate(dateString: string | number) {
   
     // Create a Date object
     const date = new Date(timestamp);
-  
+
+  console.log(date)
     const datex = new Date(Number(timestamp) * 1000); // Convert seconds to milliseconds
 
 const formattedDate = datex.toLocaleDateString("en-GB"); // "en-GB" format gives dd/mm/yyyy

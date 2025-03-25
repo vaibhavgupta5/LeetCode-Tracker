@@ -18,7 +18,6 @@ function Page() {
       const [
         userInfo,
         badges,
-        calendar,
         contests,
         last5Submissions,
         languages,
