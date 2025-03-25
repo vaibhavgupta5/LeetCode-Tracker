@@ -1,26 +1,32 @@
 {
-    "root": true,
-    "extends": ["next", "next/core-web-vitals", "eslint:recommended", "plugin:@typescript-eslint/recommended"],
-    "rules": {
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/ban-ts-comment": "off",
-      "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/no-non-null-assertion": "off",
-      "react-hooks/exhaustive-deps": "off",
-      "no-console": "off",
-      "no-unused-vars": "off",
-      "react/no-unescaped-entities": "off",
-      "react/display-name": "off",
-      "import/no-anonymous-default-export": "off",
-      "no-undef": "off",
-      "no-restricted-globals": "off",
-      "no-shadow": "off"
-    },
-    "env": {
-      "browser": true,
-      "node": true,
-      "es6": true
-    },
-    "ignorePatterns": ["node_modules/", ".next/", "dist/", "public/"]
-  }
-  
+  "root": true,
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "no-console": "off",
+    "no-unused-vars": "off",
+    "react/no-unescaped-entities": "off",
+    "react/display-name": "off",
+    "import/no-anonymous-default-export": "off",
+    "no-undef": "off",
+    "no-restricted-globals": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-unsafe-member-access": "error",
+    "@typescript-eslint/no-throw-literal": "error"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "ignorePatterns": ["node_modules/", ".next/", "dist/", "public/"]
+}
