@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </Link>
           
           <nav className="flex items-center gap-4">
-            <Link href="/dashboard" className="text-gray-400 hover:text-white">
+            <Link href="/leaderboard" className="text-gray-400 hover:text-white">
               Dashboard
             </Link>
            

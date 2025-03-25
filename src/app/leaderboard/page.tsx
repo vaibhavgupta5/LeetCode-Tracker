@@ -79,7 +79,8 @@ export default function LeaderboardPage() {
 
   const refreshData = async () => {
     setLoading(true);
-    const response = await axios.get("/api/updateAllStudentDataAtOnce");
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+    const response = await axios.get(`${baseUrl}/api/updateAllStudentDataAtOnce`);
 
     if (response.status === 200) {
       fetchStudents();
@@ -127,9 +128,7 @@ export default function LeaderboardPage() {
       
 
         <div className="relative h-[40vh] mb-16 w-full rounded-lg p-4 overflow-hidden">
-          {/* Top 3 Players */}
           <div className="absolute inset-0 flex items-end justify-center z-20">
-            {/* 2nd Place */}
             <div className="flex flex-col items-center w-56 mx-4 mb-8 transform transition-transform duration-300 hover:scale-105">
               <div className="mb-2">
                 <div className="w-14 h-14 rounded-full border-2 border-blue-500/50 p-1 bg-gray-800">
@@ -157,7 +156,6 @@ export default function LeaderboardPage() {
               </div>
             </div>
 
-            {/* 1st Place */}
             <div className="flex flex-col items-center w-56 mx-4 mb-16 transform transition-transform duration-300 hover:scale-105">
               <div className="mb-2">
                 <div className="w-14 h-14 rounded-full border-2 border-green-500/50 p-1 bg-gray-800">
@@ -185,7 +183,6 @@ export default function LeaderboardPage() {
               </div>
             </div>
 
-            {/* 3rd Place */}
             <div className="flex flex-col items-center w-56 mx-4 mb-4 transform transition-transform duration-300 hover:scale-105">
               <div className="mb-2">
                 <div className="w-14 h-14 rounded-full border-2 border-purple-500/50 p-1 bg-gray-800">
@@ -214,7 +211,6 @@ export default function LeaderboardPage() {
             </div>
           </div>
 
-          {/* 3D Grid */}
           <div className="absolute inset-0 pointer-events-none">
             <svg
               className="w-full h-full"
@@ -258,12 +254,10 @@ export default function LeaderboardPage() {
           </div>
         </div>
 
-        {/* Leaderboard Table */}
         <Card className="bg-gray-900 border-gray-800 shadow-lg overflow-hidden pl-4 pr-4">
           <CardHeader className="p-4 border-b border-gray-800 flex justify-between items-center z-10">
             <CardTitle className="text-gray-300 text-lg">Leaderboard</CardTitle>
             <div className="flex items-center space-x-4">
-              {/* Search Input */}
               <div className="relative">
                 <input
                   type="text"

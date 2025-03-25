@@ -22,13 +22,13 @@ function Page() {
         languages,
         solved,
       ] = await Promise.all([
-        axios.get(`http://localhost:3000/${username}`),
-        axios.get(`http://localhost:3000/${username}/badges`),
-        axios.get(`http://localhost:3000/${username}/calendar`),
-        axios.get(`http://localhost:3000/${username}/contest`),
-        axios.get(`http://localhost:3000/${username}/submission?limit=5`),
-        axios.get(`http://localhost:3000/languageStats?username=${username}`),
-        axios.get(`http://localhost:3000/${username}/solved`),
+        axios.get(`http://alfa-leetcode-api.onrender.com/${username}`),
+        axios.get(`http://alfa-leetcode-api.onrender.com/${username}/badges`),
+        axios.get(`http://alfa-leetcode-api.onrender.com/${username}/calendar`),
+        axios.get(`http://alfa-leetcode-api.onrender.com/${username}/contest`),
+        axios.get(`http://alfa-leetcode-api.onrender.com/${username}/submission?limit=5`),
+        axios.get(`http://alfa-leetcode-api.onrender.com/languageStats?username=${username}`),
+        axios.get(`http://alfa-leetcode-api.onrender.com/${username}/solved`),
       ]);
 
       const data = {
@@ -94,8 +94,9 @@ function Page() {
 
   const saveToDB = async (data) => {
     try {
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
       const response = await axios.post(
-        "http://localhost:3001/api/saveStudentData",
+        `${baseUrl}/api/saveStudentData`,
         data,
         { withCredentials: true }
       );

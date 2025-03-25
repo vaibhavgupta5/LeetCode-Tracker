@@ -15,8 +15,10 @@ import axios from 'axios';
 // This would be your actual data fetching function
 async function getStudentData(username: string) {
 
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+
     console.log(username)
-    const res = await fetch("http://localhost:3001/api/getStudentData", {
+    const res = await fetch(`${baseUrl}/api/getStudentData`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

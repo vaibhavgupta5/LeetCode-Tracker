@@ -22,13 +22,13 @@ export async function GET() {
           languagesRes,
           solvedRes,
         ] = await Promise.all([
-          axios.get(`http://localhost:3000/${username}`),
-          axios.get(`http://localhost:3000/${username}/badges`),
-          axios.get(`http://localhost:3000/${username}/calendar`),
-          axios.get(`http://localhost:3000/${username}/contest`),
-          axios.get(`http://localhost:3000/${username}/submission?limit=5`),
-          axios.get(`http://localhost:3000/languageStats?username=${username}`),
-          axios.get(`http://localhost:3000/${username}/solved`),
+          axios.get(`http://alfa-leetcode-api.onrender.com/${username}`),
+          axios.get(`http://alfa-leetcode-api.onrender.com/${username}/badges`),
+          axios.get(`http://alfa-leetcode-api.onrender.com/${username}/calendar`),
+          axios.get(`http://alfa-leetcode-api.onrender.com/${username}/contest`),
+          axios.get(`http://alfa-leetcode-api.onrender.com/${username}/submission?limit=5`),
+          axios.get(`http://alfa-leetcode-api.onrender.com/languageStats?username=${username}`),
+          axios.get(`http://alfa-leetcode-api.onrender.com/${username}/solved`),
         ]);
 
         const userInfo = userInfoRes.data;
