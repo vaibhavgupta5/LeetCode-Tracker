@@ -22,13 +22,13 @@ function Page() {
         languages,
         solved,
       ] = await Promise.all([
-        axios.get(`http://alfa-leetcode-api.onrender.com/${username}`),
-        axios.get(`http://alfa-leetcode-api.onrender.com/${username}/badges`),
-        axios.get(`http://alfa-leetcode-api.onrender.com/${username}/calendar`),
-        axios.get(`http://alfa-leetcode-api.onrender.com/${username}/contest`),
-        axios.get(`http://alfa-leetcode-api.onrender.com/${username}/submission?limit=5`),
-        axios.get(`http://alfa-leetcode-api.onrender.com/languageStats?username=${username}`),
-        axios.get(`http://alfa-leetcode-api.onrender.com/${username}/solved`),
+        axios.get(`https://alfa-leetcode-api.onrender.com/${username}`),
+        axios.get(`https://alfa-leetcode-api.onrender.com/${username}/badges`),
+        axios.get(`https://alfa-leetcode-api.onrender.com/${username}/calendar`),
+        axios.get(`https://alfa-leetcode-api.onrender.com/${username}/contest`),
+        axios.get(`https://alfa-leetcode-api.onrender.com/${username}/submission?limit=5`),
+        axios.get(`https://alfa-leetcode-api.onrender.com/languageStats?username=${username}`),
+        axios.get(`https://alfa-leetcode-api.onrender.com/${username}/solved`),
       ]);
 
       const data = {

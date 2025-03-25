@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -16,16 +15,16 @@ import { Student } from "@/Models/Student";
 import { Spotlight } from "@/components/ui/spotlight-new";
 import { ShootingStars } from "@/components/ui/shooting-stars";
 import { StarsBackground } from "@/components/ui/stars-background";
-import { SparklesCore } from "@/components/ui/sparkles";
 import { useRouter } from "next/navigation";
-import { FaSearch, FaSync } from "react-icons/fa"; // Import icons
+import { FaSearch, FaSync } from "react-icons/fa";
 import axios from "axios";
+import { Rocket } from "lucide-react";
 
 export default function LeaderboardPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState<Student | null>(null);
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     fetchStudents();
@@ -34,7 +33,7 @@ export default function LeaderboardPage() {
   const fetchStudents = async () => {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 seconds timeout
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
   
       const response = await fetch("/api/getAllStudentData", {
         signal: controller.signal,
@@ -57,7 +56,6 @@ export default function LeaderboardPage() {
     }
   };
 
-  const router = useRouter();
   const redirectToProfile = (username: string) => {
     router.push(`/dashboard/${username}`);
   };
@@ -81,7 +79,6 @@ export default function LeaderboardPage() {
     setLoading(true);
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
     const response = await axios.get(`${baseUrl}/api/updateAllStudentDataAtOnce`);
-
     if (response.status === 200) {
       fetchStudents();
     } else {
@@ -120,98 +117,62 @@ export default function LeaderboardPage() {
       <Spotlight />
       <ShootingStars />
       <StarsBackground />
-
       <div className="max-w-6xl mx-auto">
         <h1 className="md:text-7xl text-3xl flex w-full justify-center items-center lg:text-9xl font-bold text-center text-white relative z-20">
           Leaderboard
         </h1>
-      
-
-        <div className="relative h-[40vh] mb-16 w-full rounded-lg p-4 overflow-hidden">
-          <div className="absolute inset-0 flex items-end justify-center z-20">
-            <div className="flex flex-col items-center w-56 mx-4 mb-8 transform transition-transform duration-300 hover:scale-105">
-              <div className="mb-2">
-                <div className="w-14 h-14 rounded-full border-2 border-blue-500/50 p-1 bg-gray-800">
-                  <Avatar className="w-full h-full">
-                    <AvatarImage
-                      src={topStudents[1]?.avatar}
-                      alt={topStudents[1]?.fullName}
-                    />
-                    <AvatarFallback className="bg-gray-700 text-blue-400">
-                      {getInitials(topStudents[1]?.fullName || "SK")}
-                    </AvatarFallback>
-                  </Avatar>
+        
+        <div className="relative h-[40vh] mb-16 w-full rounded-lg p-4 overflow-hidden max-h-[400px]">
+          <div className="absolute inset-0 flex items-end justify-center z-20 overflow-x-auto">
+            <div className="flex space-x-4 md:space-x-8 items-end">
+              {topStudents.map((student, index) => (
+                <div 
+                  key={student.username} 
+                  className={`flex flex-col items-center w-36 md:w-56 mb-4 md:mb-8 transform transition-transform duration-300 hover:scale-105 ${
+                    index === 1 ? 'mb-16' : ''
+                  }`}
+                >
+                  <div className="mb-2">
+                    <div className={`w-10 h-10 md:w-14 md:h-14 rounded-full border-2 p-1 bg-gray-800 ${
+                      index === 0 ? 'border-green-500/50' : 
+                      index === 1 ? 'border-blue-500/50' : 
+                      'border-purple-500/50'
+                    }`}>
+                      <Avatar className="w-full h-full">
+                        <AvatarImage
+                          src={student?.avatar}
+                          alt={student?.fullName}
+                        />
+                        <AvatarFallback className={`bg-gray-700 ${
+                          index === 0 ? 'text-green-400' : 
+                          index === 1 ? 'text-blue-400' : 
+                          'text-purple-400'
+                        }`}>
+                          {getInitials(student?.fullName || "SK")}
+                        </AvatarFallback>
+                      </Avatar>
+                    </div>
+                  </div>
+                  <div className="bg-gray-800 p-2 border rounded-lg w-full shadow-md border-opacity-20 text-center">
+                    <div className={`mb-1 font-medium text-sm truncate ${
+                      index === 0 ? 'text-green-400' : 
+                      index === 1 ? 'text-blue-400' : 
+                      'text-purple-400'
+                    }`}>
+                      {student?.username || `Player ${index + 1}`}
+                    </div>
+                    <div className="text-white font-medium">
+                      {student?.rating || "1200"}
+                    </div>
+                    <div className="text-gray-400 text-xs mt-1">
+                      RATING
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="bg-gray-800 p-2 border border-blue-500/20 rounded-lg w-full shadow-md">
-                <div className="text-blue-400 mb-1 font-medium text-sm text-center truncate">
-                  {topStudents[1]?.username || "Player 2"}
-                </div>
-                <div className="text-white text-center font-medium">
-                  {topStudents[1]?.rating || "1200"}
-                </div>
-                <div className="text-gray-400 text-xs text-center mt-1">
-                  RATING
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col items-center w-56 mx-4 mb-16 transform transition-transform duration-300 hover:scale-105">
-              <div className="mb-2">
-                <div className="w-14 h-14 rounded-full border-2 border-green-500/50 p-1 bg-gray-800">
-                  <Avatar className="w-full h-full">
-                    <AvatarImage
-                      src={topStudents[0]?.avatar}
-                      alt={topStudents[0]?.fullName}
-                    />
-                    <AvatarFallback className="bg-gray-700 text-green-400">
-                      {getInitials(topStudents[0]?.fullName || "MS")}
-                    </AvatarFallback>
-                  </Avatar>
-                </div>
-              </div>
-              <div className="bg-gray-800 p-2 border border-green-500/20 rounded-lg w-full shadow-md">
-                <div className="text-green-400 mb-1 font-medium text-sm text-center truncate">
-                  {topStudents[0]?.username || "Player 1"}
-                </div>
-                <div className="text-white text-center font-medium">
-                  {topStudents[0]?.rating || "1500"}
-                </div>
-                <div className="text-gray-400 text-xs text-center mt-1">
-                  RATING
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col items-center w-56 mx-4 mb-4 transform transition-transform duration-300 hover:scale-105">
-              <div className="mb-2">
-                <div className="w-14 h-14 rounded-full border-2 border-purple-500/50 p-1 bg-gray-800">
-                  <Avatar className="w-full h-full">
-                    <AvatarImage
-                      src={topStudents[2]?.avatar}
-                      alt={topStudents[2]?.fullName}
-                    />
-                    <AvatarFallback className="bg-gray-700 text-purple-400">
-                      {getInitials(topStudents[2]?.fullName || "BM")}
-                    </AvatarFallback>
-                  </Avatar>
-                </div>
-              </div>
-              <div className="bg-gray-800 p-2 border border-purple-500/20 rounded-lg w-full shadow-md">
-                <div className="text-purple-400 mb-1 font-medium text-sm text-center truncate">
-                  {topStudents[2]?.username || "Player 3"}
-                </div>
-                <div className="text-white text-center font-medium">
-                  {topStudents[2]?.rating || "1000"}
-                </div>
-                <div className="text-gray-400 text-xs text-center mt-1">
-                  RATING
-                </div>
-              </div>
+              ))}
             </div>
           </div>
-
-          <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 pointer-events-none hidden md:block">
             <svg
               className="w-full h-full"
               viewBox="0 0 1000 400"
@@ -254,23 +215,22 @@ export default function LeaderboardPage() {
           </div>
         </div>
 
-        <Card className="bg-gray-900 border-gray-800 shadow-lg overflow-hidden pl-4 pr-4">
-          <CardHeader className="p-4 border-b border-gray-800 flex justify-between items-center z-10">
+        <Card className="bg-gray-900 border-gray-800 shadow-lg overflow-hidden">
+          <CardHeader className="p-4 border-b border-gray-800 flex flex-col md:flex-row justify-between items-center z-10 space-y-4 md:space-y-0">
             <CardTitle className="text-gray-300 text-lg">Leaderboard</CardTitle>
-            <div className="flex items-center space-x-4">
-              <div className="relative">
+            <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4 w-full md:w-auto">
+              <div className="relative w-full md:w-auto">
                 <input
                   type="text"
                   placeholder="Search..."
                   value={searchQuery}
                   onChange={handleSearch}
-                  className="bg-gray-800 text-gray-200 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                  className="w-full md:w-auto bg-gray-800 text-gray-200 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
                 <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               </div>
-
               <button
-                onClick={()=> refreshData()}
+                onClick={() => refreshData()}
                 className="p-2 bg-gray-800 cursor-pointer rounded-lg hover:bg-gray-700 transition-colors"
               >
                 <FaSync className="text-gray-400 cursor-pointer" />
@@ -282,26 +242,26 @@ export default function LeaderboardPage() {
               <Table className="w-full">
                 <TableHeader>
                   <TableRow className="border-gray-700 hover:bg-transparent">
-                    <TableHead className="text-gray-300 font-semibold w-20 py-4">
+                    <TableHead className="text-gray-300 font-semibold w-20 py-4 hidden md:table-cell">
                       RANK
                     </TableHead>
                     <TableHead className="text-gray-300 font-semibold py-4">
                       PLAYER
                     </TableHead>
-                    <TableHead className="text-gray-300 font-semibold py-4">
+                    <TableHead className="text-gray-300 font-semibold py-4 hidden md:table-cell">
                       SOLVED
                     </TableHead>
-                    <TableHead className="text-gray-300 font-semibold py-4">
+                    <TableHead className="text-gray-300 font-semibold py-4 hidden md:table-cell">
                       <div className="flex space-x-2">
                         <span className="text-green-400">E</span>
                         <span className="text-yellow-400">M</span>
                         <span className="text-red-400">H</span>
                       </div>
                     </TableHead>
-                    <TableHead className="text-gray-300 font-semibold py-4">
+                    <TableHead className="text-gray-300 font-semibold py-4 hidden md:table-cell">
                       SUCCESS RATE
                     </TableHead>
-                    <TableHead className="text-gray-300 font-semibold py-4">
+                    <TableHead className="text-gray-300 font-semibold py-4 hidden md:table-cell">
                       LANGUAGES
                     </TableHead>
                     <TableHead className="text-gray-300 font-semibold text-right py-4">
@@ -317,7 +277,7 @@ export default function LeaderboardPage() {
                       onClick={() => redirectToProfile(student.username)}
                     >
                       <TableCell
-                        className={`py-3 ${getPositionColor(student.raking)}`}
+                        className={`py-3 ${getPositionColor(student.raking)} hidden md:table-cell`}
                       >
                         {student.raking === 1 && "🥇 "}
                         {student.raking === 2 && "🥈 "}
@@ -334,10 +294,10 @@ export default function LeaderboardPage() {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className="text-gray-300 font-medium">
+                      <TableCell className="text-gray-300 font-medium hidden md:table-cell">
                         {student.totalQuestions.All}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center hidden md:table-cell">
                         <div className="flex space-x-3">
                           <span className="text-green-400">
                             {student.totalQuestions.Easy}
@@ -350,10 +310,10 @@ export default function LeaderboardPage() {
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-gray-300">
+                      <TableCell className="text-gray-300 hidden md:table-cell">
                         {getSuccessRate(student)}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center hidden md:table-cell">
                         <div className="flex gap-1 flex-wrap">
                           {student.mainLanguages.map((lang, i) => (
                             <Badge
@@ -375,6 +335,9 @@ export default function LeaderboardPage() {
             </div>
           </CardContent>
         </Card>
+        <div className="fixed bottom-5 right-5 p-3 flex items-center justify-center z-50 text-black rounded-full cursor-pointer bg-white" onClick={() => router.push('/register')}>
+          <Rocket strokeWidth={2.25} />
+        </div>
       </div>
     </div>
   );
