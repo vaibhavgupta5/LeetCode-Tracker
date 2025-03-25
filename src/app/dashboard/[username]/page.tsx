@@ -1,18 +1,15 @@
 //@typescript-eslint/no-unused-vars
 //@typescript-eslint/no-explicit-any
-import { Suspense } from 'react';
+
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { Github, Linkedin, Twitter, Medal } from 'lucide-react';
+import { Github, Linkedin, Twitter } from 'lucide-react';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
 import { Spotlight } from '@/components/ui/spotlight-new';
-import axios from 'axios';
 
 // This would be your actual data fetching function
 async function getStudentData(username: string) {
@@ -98,6 +95,7 @@ export default async function UserDashboard({ params }: { params: { username: st
     const mediumPercentage = (studentData.totalQuestions.Medium / totalSolved) * 100;
     const hardPercentage = (studentData.totalQuestions.Hard / totalSolved) * 100;
     
+    console.log(easyPercentage, mediumPercentage, hardPercentage);
   
       
     return (
