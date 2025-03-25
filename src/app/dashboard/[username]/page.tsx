@@ -1,6 +1,6 @@
 //@typescript-eslint/no-unused-vars
 //@typescript-eslint/no-explicit-any
-
+//@typescript-eslint/no-invalid-void-type
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Github, Linkedin, Twitter } from 'lucide-react';
