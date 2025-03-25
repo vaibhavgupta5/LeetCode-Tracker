@@ -1,3 +1,5 @@
+//@typescript-eslint/no-unused-vars
+//@typescript-eslint/no-explicit-any
 "use client";
 import axios from "axios";
 import React, { useState } from "react";
