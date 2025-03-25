@@ -81,7 +81,13 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-export default async function UserDashboard({ params }: { params: { username: string } }) {
+interface DashboardPageProps {
+  params: {
+    username: string;
+  };
+}
+
+export default async function UserDashboard({ params }: DashboardPageProps) {
   const { username } = params;
   
   try {
