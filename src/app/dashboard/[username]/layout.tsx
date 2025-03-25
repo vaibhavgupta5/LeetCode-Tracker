@@ -1,4 +1,5 @@
-// app/dashboard/layout.tsx
+//@typescript-eslint/no-unused-vars
+//@typescript-eslint/no-explicit-any
 import { ReactNode } from 'react';
 import Link from 'next/link';
 import { Code } from 'lucide-react';
