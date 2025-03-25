@@ -110,7 +110,7 @@ export async function GET() {
 
         // Update or create the student record
         await Student.findOneAndUpdate({ username }, data, { upsert: true, new: true });
-      } catch (error) {
+      } catch (error:any) {
         console.error(`Error updating student ${username}:`, error.message);
       }
     });
@@ -121,7 +121,7 @@ export async function GET() {
       JSON.stringify({ message: "Students updated successfully" }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
-  } catch (error) {
+  } catch (error:any) {
     return new Response(
       JSON.stringify({ message: "Server error", error: error.message }),
       { status: 500, headers: { "Content-Type": "application/json" } }

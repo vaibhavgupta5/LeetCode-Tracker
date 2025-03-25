@@ -86,7 +86,7 @@ interface DashboardPageProps {
 }
 
 export default async function UserDashboard({ params }: DashboardPageProps) {
-  
+
   const { username } = await params;  
   try {
     const studentData = await getStudentData(username);
@@ -346,7 +346,7 @@ export default async function UserDashboard({ params }: DashboardPageProps) {
         </div>
       </div>
     );
-  } catch (error) {
+  } catch (error:any) {
     console.error("Error fetching student data:", error);
     return (
       <div className="flex items-center justify-center h-screen bg-black">
