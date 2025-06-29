@@ -1,6 +1,6 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, model, models } from "mongoose";
 
-export interface Student  {
+export interface IStudent  {
   fullName: string;
   username: string;
   totalQuestions: {
@@ -11,39 +11,31 @@ export interface Student  {
   };
   raking: number;
   rating: number;
-  last5Submissions: [
-    {
-      title: string;
-      slug: string;
-      timeStamp: string;
-      status: string;
-      language: string;
-    }
-  ];
-  contests: [
-    {
-      attended: boolean;
-      title: string;
-      ranking: number;
-      problemsSolved: number;
-      totalQuestions: number;
-      rating: number;
-      timeStamp: string;
-    }
-  ];
-  badges: [
-    {
-      title: string;
-      timeStamp: string;
-      icon: string;
-    }
-  ];
-  calender: [
-    {
-      date: string;
-      questions: number;
-    }
-  ];
+  last5Submissions: {
+    title: string;
+    slug: string;
+    timeStamp: string;
+    status: string;
+    language: string;
+  }[];
+  contests: {
+    attended: boolean;
+    title: string;
+    ranking: number;
+    problemsSolved: number;
+    totalQuestions: number;
+    rating: number;
+    timeStamp: string;
+  }[];
+  badges: {
+    title: string;
+    timeStamp: string;
+    icon: string;
+  }[];
+  calender: {
+    date: string;
+    questions: number;
+  }[];
   about: string;
   mainLanguages: string[];
   avatar: string;
@@ -61,7 +53,7 @@ export interface Student  {
   timeStamp: Date;
 }
 
-const StudentSchema = new Schema<Student>({
+const StudentSchema = new Schema<IStudent>({
   fullName: { type: String, required: true },
   username: { type: String, required: true },
   totalQuestions: {
@@ -78,6 +70,7 @@ const StudentSchema = new Schema<Student>({
       slug: { type: String, required: true },
       timeStamp: { type: String, required: true },
       status: { type: String, required: true },
+      language: { type: String, required: true },
     },
   ],
   contests: [
@@ -109,7 +102,7 @@ const StudentSchema = new Schema<Student>({
   avatar: { type: String, required: true },
   socials: {
     github: { type: String },
-    linkedin: { type: String},
+    linkedin: { type: String },
     twitter: { type: String },
   },
   totalSubmissions: {
@@ -118,9 +111,8 @@ const StudentSchema = new Schema<Student>({
     Medium: { type: Number, required: true },
     Hard: { type: Number, required: true },
   },
-  timeStamp: { type: Date, default: Date.now }
+  timeStamp: { type: Date, default: Date.now },
 });
 
-const Student = mongoose.models.Student || mongoose.model<Student>("Student", StudentSchema);
-
+const Student = models.Student || model<IStudent>("Student", StudentSchema);
 export default Student;

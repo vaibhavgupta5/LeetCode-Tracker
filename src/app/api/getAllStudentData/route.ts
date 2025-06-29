@@ -6,7 +6,7 @@ export async function GET() {
   try {
     await connectDB();
 
-    const existingStudent = await Student.find({});
+    const existingStudent = await Student.find({}).lean();
 
     return NextResponse.json(
       { message: "Students found Successfully", student: existingStudent },
