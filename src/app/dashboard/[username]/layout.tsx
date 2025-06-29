@@ -18,10 +18,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <Code className="h-6 w-6 text-blue-500" />
             <span className="font-bold text-lg text-white">LeetCode Dashboard</span>
           </Link>
-          
-          <nav className="flex items-center gap-4">
-            <Link href="/leaderboard" className="text-gray-400 hover:text-white">
-              Dashboard
+
+          <nav className="flex  gap-4 fixed bottom-4 left-0 w-full md:w-fit items-center justify-between bg-white z-50  py-4 text-[#10192A] px-6  shadow-lg md:static md:bg-transparent md:shadow-none md:text-white md:py-0">
+            <Link href="/leaderboard" className=" font-bold w-full md:w-fit text-center hover:text-black md:hover:text-white transition-colors">
+              Leaderboard
             </Link>
            
           </nav>

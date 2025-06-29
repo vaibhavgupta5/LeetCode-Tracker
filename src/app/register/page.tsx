@@ -2,6 +2,8 @@
 //@typescript-eslint/no-explicit-any
 "use client";
 import axios from "axios";
+import { Code } from "lucide-react";
+import Link from "next/link";
 import React, { useState } from "react";
 
 function Page() {
@@ -109,8 +111,25 @@ function Page() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-gray-900 rounded-lg shadow-lg p-8 border border-gray-800">
+    <div className="min-h-screen bg-black text-white flex flex-col">
+
+      <header className="bg-gray-900 shadow-sm">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <Code className="h-6 w-6 text-blue-500" />
+            <span className="font-bold text-lg text-white">LeetCode Dashboard</span>
+          </Link>
+          
+          <nav className="flex  gap-4 fixed bottom-4 left-0 w-full md:w-fit items-center justify-between bg-white z-50  py-4 text-[#10192A] px-6  shadow-lg md:static md:bg-transparent md:shadow-none md:text-white md:py-0">
+            <Link href="/leaderboard" className=" font-bold w-full md:w-fit text-center hover:text-black md:hover:text-white transition-colors">
+              Leaderboard
+            </Link>
+           
+          </nav>
+        </div>
+      </header>
+
+      <div className="max-w-md mt-[12vh] mx-auto w-full bg-gray-900 rounded-lg shadow-lg p-8 border border-gray-800">
         <h1 className="text-2xl font-bold text-center mb-6 text-green-400">
           Enter LeetCode Username
         </h1>

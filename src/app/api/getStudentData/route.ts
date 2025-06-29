@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     await connectDB();
 
    
-    const existingStudent = await Student.findOne({
+    const existingStudent = await (Student as any).findOne({
       username,
     });
 

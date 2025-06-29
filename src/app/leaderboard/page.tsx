@@ -20,7 +20,8 @@ import { StarsBackground } from "@/components/ui/stars-background";
 import { useRouter } from "next/navigation";
 import { FaSearch, FaSync } from "react-icons/fa";
 import axios from "axios";
-import { Rocket } from "lucide-react";
+import { Code, Rocket } from "lucide-react";
+import Link from "next/link";
 
 export default function LeaderboardPage() {
   const [students, setStudents] = useState<Student[]>([]);
@@ -115,108 +116,190 @@ export default function LeaderboardPage() {
   const topStudents = students.slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-black text-white p-4">
+    <div className="min-h-screen bg-black text-white">
       <Spotlight />
       <ShootingStars />
       <StarsBackground />
-      <div className="max-w-6xl mx-auto">
+
+         <header className="bg-gray-900 shadow-sm">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <Code className="h-6 w-6 text-blue-500" />
+            <span className="font-bold text-lg text-white">LeetCode Dashboard</span>
+          </Link>
+          
+          <nav className="md:flex  gap-4 fixed bottom-4 left-0 w-full md:w-fit items-center justify-between bg-white z-50  py-4 text-[#10192A] px-6 hidden  shadow-lg md:static md:bg-transparent md:shadow-none md:text-white md:py-0">
+            <Link href="/register" className=" font-bold w-full md:w-fit text-center hover:text-black md:hover:text-white transition-colors">
+              Add Yourself
+            </Link>
+           
+          </nav>
+        </div>
+      </header>
+      <div className="max-w-6xl mx-auto mt-12 md:mt-6">
         <h1 className="md:text-7xl text-3xl flex w-full justify-center items-center lg:text-9xl font-bold text-center text-white relative z-20">
           Leaderboard
         </h1>
         
-        <div className="relative h-[40vh] mb-16 w-full rounded-lg p-4 overflow-hidden max-h-[400px]">
-          <div className="absolute inset-0 flex items-end justify-center z-20 overflow-x-auto">
-            <div className="flex space-x-4 md:space-x-8 items-end">
-              {topStudents.map((student, index) => (
-                <div 
-                  key={student.username} 
-                  className={`flex flex-col items-center w-36 md:w-56 mb-4 md:mb-8 transform transition-transform duration-300 hover:scale-105 ${
-                    index === 1 ? 'mb-16' : ''
-                  }`}
-                >
-                  <div className="mb-2">
-                    <div className={`w-10 h-10 md:w-14 md:h-14 rounded-full border-2 p-1 bg-gray-800 ${
-                      index === 0 ? 'border-green-500/50' : 
-                      index === 1 ? 'border-blue-500/50' : 
-                      'border-purple-500/50'
-                    }`}>
-                      <Avatar className="w-full h-full">
-                        <AvatarImage
-                          src={student?.avatar}
-                          alt={student?.fullName}
-                        />
-                        <AvatarFallback className={`bg-gray-700 ${
-                          index === 0 ? 'text-green-400' : 
-                          index === 1 ? 'text-blue-400' : 
-                          'text-purple-400'
-                        }`}>
-                          {getInitials(student?.fullName || "SK")}
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
-                  </div>
-                  <div className="bg-gray-800 p-2 border rounded-lg w-full shadow-md border-opacity-20 text-center">
-                    <div className={`mb-1 font-medium text-sm truncate ${
-                      index === 0 ? 'text-green-400' : 
-                      index === 1 ? 'text-blue-400' : 
-                      'text-purple-400'
-                    }`}>
-                      {student?.username || `Player ${index + 1}`}
-                    </div>
-                    <div className="text-white font-medium">
-                      {student?.rating || "1200"}
-                    </div>
-                    <div className="text-gray-400 text-xs mt-1">
-                      RATING
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+<div className="relative md:h-[40vh] h-auto mb-16 w-full rounded-lg p-4 overflow-hidden max-h-[400px]">
+  {/* Mobile View - Vertical Stack */}
+  <div className="md:hidden flex flex-col items-center space-y-4">
+    {topStudents.map((student, index) => (
+      <div 
+        key={student.username} 
+        className={`flex items-center w-full max-w-md p-4 bg-gray-800 rounded-lg border ${
+          index === 0 ? 'border-green-500/50' : 
+          index === 1 ? 'border-blue-500/50' : 
+          'border-purple-500/50'
+        }`}
+      >
+        <div className={`w-12 h-12 rounded-full border-2 p-1 mr-4 ${
+          index === 0 ? 'border-green-500/50' : 
+          index === 1 ? 'border-blue-500/50' : 
+          'border-purple-500/50'
+        }`}>
+          <Avatar className="w-full h-full">
+            <AvatarImage
+              src={student?.avatar}
+              alt={student?.fullName}
+            />
+            <AvatarFallback className={`bg-gray-700 ${
+              index === 0 ? 'text-green-400' : 
+              index === 1 ? 'text-blue-400' : 
+              'text-purple-400'
+            }`}>
+              {getInitials(student?.fullName || "SK")}
+            </AvatarFallback>
+          </Avatar>
+        </div>
+        <div className="flex-1">
+          <div className={`font-medium truncate ${
+            index === 0 ? 'text-green-400' : 
+            index === 1 ? 'text-blue-400' : 
+            'text-purple-400'
+          }`}>
+            {student?.username || `Player ${index + 1}`}
           </div>
-          <div className="absolute inset-0 pointer-events-none hidden md:block">
-            <svg
-              className="w-full h-full"
-              viewBox="0 0 1000 400"
-              preserveAspectRatio="none"
-            >
-              <defs>
-                <linearGradient
-                  id="gridGradient"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="100%"
-                >
-                  <stop
-                    offset="0%"
-                    style={{
-                      stopColor: "rgba(255, 255, 255, 0.05)",
-                      stopOpacity: 1,
-                    }}
-                  />
-                  <stop
-                    offset="100%"
-                    style={{
-                      stopColor: "rgba(255, 255, 255, 0.01)",
-                      stopOpacity: 1,
-                    }}
-                  />
-                </linearGradient>
-              </defs>
-              <g stroke="url(#gridGradient)" strokeWidth="1">
-                <line x1="150" y1="300" x2="500" y2="250" />
-                <line x1="500" y1="250" x2="850" y2="300" />
-                <line x1="150" y1="300" x2="150" y2="350" />
-                <line x1="500" y1="250" x2="500" y2="350" />
-                <line x1="850" y1="300" x2="850" y2="350" />
-                <line x1="150" y1="350" x2="500" y2="350" />
-                <line x1="500" y1="350" x2="850" y2="350" />
-              </g>
-            </svg>
+          <div className="text-white font-medium">
+            {student?.rating || "1200"}
+          </div>
+          <div className="text-gray-400 text-xs">
+            RATING
           </div>
         </div>
+        {index === 1 && (
+          <div className="ml-2 px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded">
+            2nd
+          </div>
+        )}
+        {index === 0 && (
+          <div className="ml-2 px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">
+            1st
+          </div>
+        )}
+        {index > 1 && (
+          <div className="ml-2 px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded">
+            {index + 1}th
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
 
+  {/* Desktop View - Same as original */}
+  <div className="hidden md:block absolute inset-0 flex items-end justify-center z-20">
+    <div className="flex h-full space-x-8 items-end flex-wrap justify-center">
+      {topStudents.map((student, index) => (
+        <div 
+          key={student.username} 
+          className={`flex flex-col items-center w-56 mb-8 transform transition-transform duration-300 hover:scale-105 ${
+            index === 1 ? 'mb-16' : ''
+          }`}
+        >
+          <div className="mb-2">
+            <div className={`w-14 h-14 rounded-full border-2 p-1 bg-gray-800 ${
+              index === 0 ? 'border-green-500/50' : 
+              index === 1 ? 'border-blue-500/50' : 
+              'border-purple-500/50'
+            }`}>
+              <Avatar className="w-full h-full">
+                <AvatarImage
+                  src={student?.avatar}
+                  alt={student?.fullName}
+                />
+                <AvatarFallback className={`bg-gray-700 ${
+                  index === 0 ? 'text-green-400' : 
+                  index === 1 ? 'text-blue-400' : 
+                  'text-purple-400'
+                }`}>
+                  {getInitials(student?.fullName || "SK")}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+          </div>
+          <div className="bg-gray-800 p-2 border rounded-lg w-full shadow-md border-opacity-20 text-center">
+            <div className={`mb-1 font-medium text-sm truncate ${
+              index === 0 ? 'text-green-400' : 
+              index === 1 ? 'text-blue-400' : 
+              'text-purple-400'
+            }`}>
+              {student?.username || `Player ${index + 1}`}
+            </div>
+            <div className="text-white font-medium">
+              {student?.rating || "1200"}
+            </div>
+            <div className="text-gray-400 text-xs mt-1">
+              RATING
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  {/* Desktop Background */}
+  <div className="hidden md:block absolute inset-0 pointer-events-none">
+    <svg
+      className="w-full h-full"
+      viewBox="0 0 1000 400"
+      preserveAspectRatio="none"
+    >
+      <defs>
+        <linearGradient
+          id="gridGradient"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="100%"
+        >
+          <stop
+            offset="0%"
+            style={{
+              stopColor: "rgba(255, 255, 255, 0.05)",
+              stopOpacity: 1,
+            }}
+          />
+          <stop
+            offset="100%"
+            style={{
+              stopColor: "rgba(255, 255, 255, 0.01)",
+              stopOpacity: 1,
+            }}
+          />
+        </linearGradient>
+      </defs>
+      <g stroke="url(#gridGradient)" strokeWidth="1">
+        <line x1="150" y1="300" x2="500" y2="250" />
+        <line x1="500" y1="250" x2="850" y2="300" />
+        <line x1="150" y1="300" x2="150" y2="350" />
+        <line x1="500" y1="250" x2="500" y2="350" />
+        <line x1="850" y1="300" x2="850" y2="350" />
+        <line x1="150" y1="350" x2="500" y2="350" />
+        <line x1="500" y1="350" x2="850" y2="350" />
+      </g>
+    </svg>
+  </div>
+</div>
         <Card className="bg-gray-900 border-gray-800 shadow-lg overflow-hidden">
           <CardHeader className="p-4 border-b border-gray-800 flex flex-col md:flex-row justify-between items-center z-10 space-y-4 md:space-y-0">
             <CardTitle className="text-gray-300 text-lg">Leaderboard</CardTitle>
