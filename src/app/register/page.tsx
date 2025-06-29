@@ -101,6 +101,7 @@ function Page() {
         data,
         { withCredentials: true }
       );
+      window.location.href = `${baseUrl}/dashboard/${data.username}`;
       console.log(response.data);
     } catch (error) {
       console.log(error.message);
