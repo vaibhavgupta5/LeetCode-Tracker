@@ -114,5 +114,5 @@ const StudentSchema = new Schema<IStudent>({
   timeStamp: { type: Date, default: Date.now },
 });
 
-const Student = models.Student || model<IStudent>("Student", StudentSchema);
-export default Student;
+export default models.Student || model("Student", StudentSchema);
+

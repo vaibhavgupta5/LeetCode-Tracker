@@ -1,6 +1,9 @@
-import Student from "@/Models/Student";
 import connectDB from "@/utils/connectDB";
 import { NextRequest, NextResponse } from "next/server";
+import StudentModel, { IStudent } from "@/Models/Student";
+import mongoose, { Model } from "mongoose";
+
+const Student = StudentModel as Model<IStudent>;
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,7 +15,7 @@ export async function POST(req: NextRequest) {
     await connectDB();
 
    
-    const existingStudent = await (Student as any).findOne({
+    const existingStudent = await (Student as typeof mongoose.Model).findOne({
       username,
     });
 
