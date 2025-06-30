@@ -90,7 +90,7 @@ export default function LeaderboardPage() {
     }
   }
 
-  const getSuccessRate = (student: Student) => {
+  const getSuccessRate = (student: IStudent) => {
     if (student.totalSubmissions.All === 0) return "0.00%";
     const rate =
       (student.totalQuestions.All / student.totalSubmissions.All) * 100;
