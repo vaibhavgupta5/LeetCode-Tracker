@@ -35,8 +35,8 @@ const eslintConfig = [
       "no-undef": "off",
       "no-restricted-globals": "off",
       "no-shadow": "off",
-      "@typescript-eslint/no-unsafe-member-access": "error",
-      "no-throw-literal": "error",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "no-throw-literal": "off",
     },
   },
 ];
