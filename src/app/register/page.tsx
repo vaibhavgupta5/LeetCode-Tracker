@@ -99,11 +99,11 @@ function Page() {
     try {
       const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
       const response = await axios.post(
-        `${baseUrl}/api/saveStudentData`,
+        `/api/saveStudentData`,
         data,
         { withCredentials: true }
       );
-      window.location.href = `${baseUrl}/dashboard/${data.username}`;
+      window.location.href = `/dashboard/${data.username}`;
       console.log(response.data);
     } catch (error) {
       console.log(error.message);

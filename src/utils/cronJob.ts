@@ -4,7 +4,7 @@ import axios from "axios";
 const fetchAPI = async () => {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
-    const response = await axios.get(`${baseUrl}/updateAllStudentDataAtOnce/`);
+    const response = await axios.get(`/api/updateAllStudentDataAtOnce/`);
     console.log("Fetched data:", response.data);
   } catch (error) {
     console.error("Error fetching API:", (error as Error).message);

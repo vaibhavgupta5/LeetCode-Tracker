@@ -80,8 +80,7 @@ export default function LeaderboardPage() {
 
   const refreshData = async () => {
     setLoading(true);
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
-    const response = await axios.get(`${baseUrl}/api/updateAllStudentDataAtOnce`);
+    const response = await axios.get(`/api/updateAllStudentDataAtOnce`);
     if (response.status === 200) {
       fetchStudents();
     } else {
