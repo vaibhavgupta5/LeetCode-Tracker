@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Student } from "@/Models/Student";
 import { Spotlight } from "@/components/ui/spotlight-new";
 import { ShootingStars } from "@/components/ui/shooting-stars";
 import { StarsBackground } from "@/components/ui/stars-background";
@@ -22,9 +21,10 @@ import { FaSearch, FaSync } from "react-icons/fa";
 import axios from "axios";
 import { Code, Rocket } from "lucide-react";
 import Link from "next/link";
+import { IStudent } from "@/Models/Student";
 
 export default function LeaderboardPage() {
-  const [students, setStudents] = useState<Student[]>([]);
+  const [students, setStudents] = useState<IStudent[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
