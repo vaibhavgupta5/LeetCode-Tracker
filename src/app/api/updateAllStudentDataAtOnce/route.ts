@@ -1,6 +1,9 @@
-import Student from "@/Models/Student";
 import connectDB from "@/utils/connectDB";
 import axios from "axios";
+import StudentModel, { IStudent } from "@/Models/Student";
+import { Model } from "mongoose";
+
+const Student = StudentModel as Model<IStudent>;
 
 export async function GET() {
   try {
