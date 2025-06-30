@@ -7,7 +7,7 @@ function Page() {
   const router = useRouter()
 
   React.useEffect(() => {
-    router.push('/leaderboard')
+    router.push('/register')
   }, [])
 
   return (
